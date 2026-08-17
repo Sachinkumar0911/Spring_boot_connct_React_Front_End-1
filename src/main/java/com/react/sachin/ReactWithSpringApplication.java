@@ -8,7 +8,7 @@ public class ReactWithSpringApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ReactWithSpringApplication.class, args);
-	System.out.println("React----By SAchin--");
+		System.out.println("React----By SAchin--");
 	}
 
 }
