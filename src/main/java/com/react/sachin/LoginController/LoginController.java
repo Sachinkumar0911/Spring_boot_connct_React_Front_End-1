@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,6 +23,10 @@ public class LoginController {
    
     @Autowired
     private UserRepository userRepository; 
+
+@Autowired
+private PasswordEncoder passwordEncoder;
+
 
 @PostMapping
     public ResponseEntity<?> login(@RequestBody LoginModel request) {
@@ -42,12 +47,38 @@ public class LoginController {
                     .body("Invalid username or password");
         }
         UserModel user = userOptional.get(); 
-if (!user.getPassword().equals(request.getPassword())) {
 
-            return ResponseEntity
-                    .status(HttpStatus.UNAUTHORIZED)
-                    .body("Invalid username or password");
-        }
+ // BCrypt password verification
+    if (!passwordEncoder.matches(
+            request.getPassword(),
+            user.getPassword())) {
+
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body("Invalid username or password");
+    }
+
+    // Check verification
+    if (!"Y".equalsIgnoreCase(user.getIsVerified())) {
+
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body("User is not verified");
+    }
+
+    // Check active
+    if (!Boolean.TRUE.equals(user.getActive())) {
+
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body("User is inactive");
+    }
+        // if (!user.getPassword().equals(request.getPassword())) {
+
+//             return ResponseEntity
+//                     .status(HttpStatus.UNAUTHORIZED)
+//                     .body("Invalid username or password");
+//         }
 System.out.println("1 "+ResponseEntity.ok("Login successful"));
         return ResponseEntity.ok("Login successful");
 

@@ -1,5 +1,6 @@
 package com.react.sachin.LoginModel;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,6 +21,11 @@ public class UserModel {
     private String name;
 
     private String role;
+
+    @Column(name = "is_verified")
+    private String isVerified;
+
+    private Boolean active;
 
  
     public Long getId() {
@@ -62,5 +68,19 @@ public class UserModel {
         this.role = role;
     }
 
-     
+      public String getIsVerified() {
+        return isVerified;
+    }
+
+    public void setIsVerified(String isVerified) {
+        this.isVerified = isVerified;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
 }
