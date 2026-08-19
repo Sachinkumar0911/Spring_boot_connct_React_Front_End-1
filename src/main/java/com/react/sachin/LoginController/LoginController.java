@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.react.sachin.JWTFeature.JwtService;
+import com.react.sachin.JWTFeature.LoginResponse;
 import com.react.sachin.LoginModel.LoginModel;
 import com.react.sachin.LoginModel.UserModel;
 import com.react.sachin.LoginRepo.UserRepository;
@@ -24,9 +26,11 @@ public class LoginController {
     @Autowired
     private UserRepository userRepository; 
 
-@Autowired
-private PasswordEncoder passwordEncoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
+    @Autowired
+private JwtService jwtService;
 
 @PostMapping
     public ResponseEntity<?> login(@RequestBody LoginModel request) {
@@ -80,7 +84,24 @@ private PasswordEncoder passwordEncoder;
 //                     .body("Invalid username or password");
 //         }
 System.out.println("1 "+ResponseEntity.ok("Login successful"));
-        return ResponseEntity.ok("Login successful");
+       
+///////////////////for jwt Start ////////////////
+String token = jwtService.generateToken(
+        user.getUsername(),
+        user.getRole()
+);
+LoginResponse response = new LoginResponse(
+        "Login successful",
+        token,
+        user.getUsername(),
+        user.getName(),
+        user.getRole()
+);
+ 
+return ResponseEntity.ok(response);
+///////////////////for jwt End ////////////////
+
+// return ResponseEntity.ok("Login successful");
 
         //return ResponseEntity.ok("Login successful");
     }

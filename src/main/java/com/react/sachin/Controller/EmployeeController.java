@@ -18,7 +18,7 @@ import com.react.sachin.Service.EmployeeService;
 
 @RestController
 @RequestMapping("/employees")
-@CrossOrigin(origins = "http://localhost:5173")
+//@CrossOrigin(origins = "http://localhost:5173") //beceaue we configured in security config cor configration 
 public class EmployeeController {
 
     @Autowired
