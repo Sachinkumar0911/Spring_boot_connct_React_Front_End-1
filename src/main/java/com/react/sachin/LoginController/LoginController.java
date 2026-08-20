@@ -20,7 +20,7 @@ import com.react.sachin.LoginRepo.UserRepository;
 
 @RestController
 @RequestMapping("/login")
-@CrossOrigin(origins = "http://localhost:5173")
+//@CrossOrigin(origins = "http://localhost:5173")
 public class LoginController {
    
     @Autowired

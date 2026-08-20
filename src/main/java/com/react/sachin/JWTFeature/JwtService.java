@@ -18,7 +18,8 @@ public class JwtService {
             );
 
     // Token validity = 1 hour
-    private final long expirationTime = 60 * 60 * 1000;
+    private final long expirationTime = 60 * 1000; 
+    //60 * 60 * 1000;
 
     public String generateToken(String username, String role) {
 
