@@ -27,9 +27,8 @@ public class LoginController {
     private UserRepository userRepository; 
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
+private PasswordEncoder passwordEncoder;
+@Autowired
 private JwtService jwtService;
 
 @PostMapping
@@ -44,66 +43,30 @@ private JwtService jwtService;
             //System.out.println("userOptional -"+userOptional.get().getName());   
             
              // Username not found
+            // System.out.println("userOptional-----"+userOptional);
         if (userOptional.isEmpty()) {
-
+System.out.println("------------------------");
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
                     .body("Invalid username or password");
         }
         UserModel user = userOptional.get(); 
+       System.out.println("user.getPassword() -"+user.getPassword()+ " 3-- "+request.getPassword()); 
+//if (!user.getPassword().equals(request.getPassword())) {
+if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+System.out.println("-------------11111111111111111-----------");
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body("Invalid username or password");
+        }
+String token = jwtService.generateToken(user.getUsername(),"User");
 
- // BCrypt password verification
-    if (!passwordEncoder.matches(
-            request.getPassword(),
-            user.getPassword())) {
+LoginResponse response = new LoginResponse("Login successful",token,user.getUsername(),user.getName(),user.getRole());
 
-        return ResponseEntity
-                .status(HttpStatus.UNAUTHORIZED)
-                .body("Invalid username or password");
-    }
+System.out.println("1 "+ResponseEntity.ok(response));
+        return ResponseEntity.ok(response);
 
-    // Check verification
-    if (!"Y".equalsIgnoreCase(user.getIsVerified())) {
-
-        return ResponseEntity
-                .status(HttpStatus.UNAUTHORIZED)
-                .body("User is not verified");
-    }
-
-    // Check active
-    if (!Boolean.TRUE.equals(user.getActive())) {
-
-        return ResponseEntity
-                .status(HttpStatus.UNAUTHORIZED)
-                .body("User is inactive");
-    }
-        // if (!user.getPassword().equals(request.getPassword())) {
-
-//             return ResponseEntity
-//                     .status(HttpStatus.UNAUTHORIZED)
-//                     .body("Invalid username or password");
-//         }
-System.out.println("1 "+ResponseEntity.ok("Login successful"));
-       
-///////////////////for jwt Start ////////////////
-String token = jwtService.generateToken(
-        user.getUsername(),
-        user.getRole()
-);
-LoginResponse response = new LoginResponse(
-        "Login successful",
-        token,
-        user.getUsername(),
-        user.getName(),
-        user.getRole()
-);
- 
-return ResponseEntity.ok(response);
-///////////////////for jwt End ////////////////
-
-// return ResponseEntity.ok("Login successful");
-
-        //return ResponseEntity.ok("Login successful");
+        //return ResponseEntity.ok(response);
     }
 
 }

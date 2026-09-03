@@ -74,9 +74,27 @@
     <version>0.12.6</version>
     <scope>runtime</scope>
 </dependency>
+ <dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-devtools</artifactId>
+    <scope>runtime</scope>
+    <optional>true</optional>
+</dependency>  
+<dependency>
+    <groupId>com.ccavenue</groupId>
+    <artifactId>ccavenue-kit</artifactId>
+    <version>1.0</version>
+</dependency>
 
 <!-- /////////////////////////////END/////////////// -->
+<!-- /////////////kafka -->
+<!-- <dependency>
+    <groupId>org.springframework.kafka</groupId>
+    <artifactId>spring-kafka</artifactId>
+</dependency> -->
 
+ 
+<!-- ///kafka END -->
 	</dependencies>
 
 	<build>

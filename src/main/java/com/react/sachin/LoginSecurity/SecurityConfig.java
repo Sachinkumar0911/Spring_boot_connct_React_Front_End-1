@@ -45,7 +45,13 @@ public class SecurityConfig {
             
             .authorizeHttpRequests(auth -> auth
                  // Login is public
-                .requestMatchers("/login").permitAll()
+                .requestMatchers(
+                    "/login",
+                    "/Registration/register",
+                    "/payment/response",
+                    "/payment/order-status"
+                   //  "/payment/response" // for payment response
+                ).permitAll() // if any request send from react than we give here permission
 
                  // Everything else requires JWT
                 .anyRequest().authenticated() // only authanticalte are allowed
@@ -74,6 +80,7 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(
                 java.util.List.of(
                     "http://localhost:5173"
+                    //"https://test.ccavenue.com"
                 )
         );
 
@@ -93,9 +100,32 @@ public class SecurityConfig {
 
         configuration.setAllowCredentials(true);
 
+        ////////////////////////for payment gateways response/////////////
+org.springframework.web.cors.CorsConfiguration paymentConfig =
+                new org.springframework.web.cors.CorsConfiguration();
+
+        paymentConfig.setAllowedOriginPatterns(
+                java.util.List.of("*")
+        );
+
+        paymentConfig.setAllowedMethods(
+                java.util.List.of("GET", "POST", "OPTIONS")
+        );
+
+        paymentConfig.setAllowedHeaders(
+                java.util.List.of("*")
+        );
+
+        paymentConfig.setAllowCredentials(false);
+
+        ////////////////////////////////////////////////////////////////
         org.springframework.web.cors.UrlBasedCorsConfigurationSource source =
                 new org.springframework.web.cors.UrlBasedCorsConfigurationSource();
-
+//  Most specific patterns first
+        source.registerCorsConfiguration(
+            "/payment/response",
+                paymentConfig
+    );
         source.registerCorsConfiguration(
                 "/**",
                 configuration
